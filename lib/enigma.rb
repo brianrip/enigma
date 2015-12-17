@@ -4,16 +4,17 @@ require_relative 'crack/cracker'
 
 class Enigma
 
-  def encrypt(message, key = nil, date = nil)
-    Encrypt.new(key).encrypt_message(message)
+  def encrypt(message = nil, key = nil, date = nil)
+    Encrypt.new.encrypt_message(message)
   end
 
-  def decrypt(message, key = nil, date = nil)
+  def decrypt(message = nil, key = nil, date = nil)
     Decrypt.new.decrypt_message(message)
   end
 
-  def crack(message)
+  def crack(message = nil)
     Crack.new.crack_it(message)
   end
 
 end
+Encrypt.new.encrypt_message("message")

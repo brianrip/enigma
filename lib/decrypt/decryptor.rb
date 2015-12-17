@@ -1,39 +1,38 @@
-require_relative 'decrypt_key_generator'    # => true
-require_relative 'decrypt_date_calculator'  # => true
-require_relative 'decrypt_cipher'           # => true
+require_relative 'decrypt_key_generator'
+require_relative 'decrypt_date_calculator'
+require_relative 'decrypt_cipher'
 class Decrypt
-  attr_accessor :key, :offset, :cipher      # => nil
+  attr_accessor :key, :offset, :cipher
 
   def initialize
-    @key = DecryptKeyGenerator.new("12345")  # => #<DecryptKeyGenerator:0x007fbfcc184460 @key="12345">
-    @offset = DecryptDateCalculator.new      # => #<DecryptDateCalculator:0x007fbfcc184190 @date=14790208225>
-    @cipher = DecryptCipher.new.index        # => ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " ", ".", ","]
-  end                                        # => :initialize
+    @key = DecryptKeyGenerator.new("12345")
+    @offset = DecryptDateCalculator.new
+    @cipher = DecryptCipher.new.index
+  end
 
   def rotation_value
-    rotation_values = @offset.array_of_offsets.zip(@key.array_of_keys)  # => [[8, 12], [2, 23], [2, 34], [5, 45]], [[8, 12], [2, 23], [2, 34], [5, 45]], [[8, 12], [2, 23], [2, 34], [5, 45]], [[8, 12], [2, 23], [2, 34], [5, 45]], [[8, 12], [2, 23], [2, 34], [5, 45]]
-    rotation_values.map{ |value| value.reduce(:+) }                     # => [20, 25, 36, 50], [20, 25, 36, 50], [20, 25, 36, 50], [20, 25, 36, 50], [20, 25, 36, 50]
-  end                                                                   # => :rotation_value
+    rotation_values = @offset.array_of_offsets.zip(@key.array_of_keys)
+    rotation_values.map{ |value| value.reduce(:+) }
+  end
 
   def decrypt_message(message)
-      message = message.downcase.chars                               # => ["v", "d", "f", "l", "7"]
-      message.map!.with_index do |string,index|                      # => #<Enumerator: ["v", "d", "f", "l", "7"]:map!>
-        if index % 4 == 0                                            # => true, false, false, false, true
-          full_rotation = @cipher.index(string) - rotation_value[0]  # => 1, 13
-          string = @cipher.rotate(full_rotation)[0]                  # => "b", "n"
-        elsif index % 4 == 1                                         # => true, false, false
-          full_rotation = @cipher.index(string) - rotation_value[1]  # => -22
-          string = @cipher.rotate(full_rotation)[0]                  # => "r"
-        elsif index % 4 == 2                                         # => true, false
-          full_rotation = @cipher.index(string) - rotation_value[2]  # => -31
-          string = @cipher.rotate(full_rotation)[0]                  # => "i"
+      message = message.downcase.chars
+      message.map!.with_index do |string,index|
+        if index % 4 == 0
+          full_rotation = @cipher.index(string) - rotation_value[0]
+          string = @cipher.rotate(full_rotation)[0]
+        elsif index % 4 == 1
+          full_rotation = @cipher.index(string) - rotation_value[1]
+          string = @cipher.rotate(full_rotation)[0]
+        elsif index % 4 == 2
+          full_rotation = @cipher.index(string) - rotation_value[2]
+          string = @cipher.rotate(full_rotation)[0]
         else
-          full_rotation = @cipher.index(string) - rotation_value[3]  # => -39
-          string = @cipher.rotate(full_rotation)[0]                  # => "a"
-        end                                                          # => "b", "r", "i", "a", "n"
-      end                                                            # => ["b", "r", "i", "a", "n"]
-      message.join                                                   # => "brian"
-    end                                                              # => :decrypt_message
-end                                                                  # => :decrypt_message
-
-Decrypt.new.decrypt_message("vdfl7")  # => "brian"
+          full_rotation = @cipher.index(string) - rotation_value[3]
+          string = @cipher.rotate(full_rotation)[0]
+        end
+      end
+      message.join
+    end
+end
+Decrypt.new.decrypt_message("odfl0wf3kdblqk741wct07pskx8p028j")
