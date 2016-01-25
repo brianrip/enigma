@@ -1,21 +1,12 @@
-require_relative 'file_reader'
 require_relative 'encryptor'
-require_relative 'key_generator'
-require_relative 'file_writer'
 
-input = ARGV[0] || "message.txt"
-input_1 = ARGV[1] || "encrypted.txt"
+message = File.read(ARGV[0]).chomp
+key = "%05d" % rand(0..99999)
+date = Time.new.strftime("%d""%m""%y")
 
-class Runner
-  def initialize(input, input_1)
-    message = FileReader.new(input).file_reader
-    message_encrypt = Encryptor.new
-    message_to_be_encrypted = message_encrypt.encrypt_letter(message)
-    key = message_encrypt.key
-    current_date = CurrentDate.new.current_date
-    FileWriter.new(message_to_be_encrypted, input_1).file_writer
-    puts "Created #{input_1} with the key #{key} and date #{current_date}"
-  end
-end
+encrypted_message = Encrypt.new(message, key, date).encrypt_message(message)
 
-Runner.new(input, input_1)
+File.write(ARGV[1], encrypted_message)
+
+puts "Created '#{ARGV[1]}' with the key #{key} and date #{date}"
+# ruby ./lib/encrypt/encrypt.rb message.txt encrypted.txt

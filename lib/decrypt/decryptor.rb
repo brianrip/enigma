@@ -1,7 +1,7 @@
 require_relative 'decrypt_key_generator'
 require_relative 'decrypt_date_calculator'
 require_relative 'decrypt_cipher'
-class Decrypt
+class Decryptor
   attr_accessor :key, :offset, :cipher
 
   def initialize
@@ -35,4 +35,4 @@ class Decrypt
       message.join
     end
 end
-Decrypt.new.decrypt_message("odfl0wf3kdblqk741wct07pskx8p028j")
+Decryptor.new.decrypt_message("odfl0wf3kdblqk741wct07pskx8p028j")

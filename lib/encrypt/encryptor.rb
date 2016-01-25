@@ -16,23 +16,24 @@ class Encrypt
   end
 
   def encrypt_message(message)
-      message = message.downcase.chars
-      message.map!.with_index do |string,index|
-        if index % 4 == 0
-          full_rotation = @cipher.index(string) + rotation_value[0]
-          string = @cipher.rotate(full_rotation)[0]
-        elsif index % 4 == 1
-          full_rotation = @cipher.index(string) + rotation_value[1]
-          string = @cipher.rotate(full_rotation)[0]
-        elsif index % 4 == 2
-          full_rotation = @cipher.index(string) + rotation_value[2]
-          string = @cipher.rotate(full_rotation)[0]
-        else
-          full_rotation = @cipher.index(string) + rotation_value[3]
-          string = @cipher.rotate(full_rotation)[0]
-        end
+    message = message.downcase.chars
+    message.map!.with_index do |string,index|
+      if index % 4 == 0
+        full_rotation = @cipher.index(string) + rotation_value[0]
+        string = @cipher.rotate(full_rotation)[0]
+      elsif index % 4 == 1
+        full_rotation = @cipher.index(string) + rotation_value[1]
+        string = @cipher.rotate(full_rotation)[0]
+      elsif index % 4 == 2
+        full_rotation = @cipher.index(string) + rotation_value[2]
+        string = @cipher.rotate(full_rotation)[0]
+      else
+        full_rotation = @cipher.index(string) + rotation_value[3]
+        string = @cipher.rotate(full_rotation)[0]
       end
-      message.join
     end
+    message.join
+  end
 end
 Encrypt.new.encrypt_message("Brian is ready to finish ..end..")
+Offset.new
